@@ -53,10 +53,13 @@ workflows:
   version: 2
   deploy:
     jobs:
-    - deploy:
+    - build:
         filters:
           branches:
             only: master
+    - deploy:
+        requires:
+          - build
 
 
 
