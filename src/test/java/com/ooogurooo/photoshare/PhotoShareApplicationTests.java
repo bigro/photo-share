@@ -11,7 +11,6 @@ public class PhotoShareApplicationTests {
 
 	@Test
 	public void contextLoads() {
-		throw new AssertionError();
 	}
 
 }
