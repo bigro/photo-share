@@ -13,6 +13,7 @@ import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,9 +38,10 @@ public class BotController {
 
     @EventMapping
     public Message handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException {
+        Path postImage = null;
         try {
             MessageContentResponse response = lineMessagingClient.getMessageContent(event.getMessage().getId()).get();
-            Path postImage = Files.createTempFile(Paths.get("src/main/resources/temp/"), "copied.", response.getMimeType());
+            postImage = Files.createTempFile("copied", "." + response.getMimeType());
             Files.copy(response.getStream(), postImage);
 
             Cloudinary cloudinary = new Cloudinary();
@@ -47,8 +49,13 @@ public class BotController {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return new TextMessage("画像を登録できませんでした。");
+        } finally {
+            if (postImage != null) {
+                File file = postImage.toFile();
+                file.delete();
+            }
         }
-        
+
         return new TextMessage("画像を投稿しました。");
     }
 
