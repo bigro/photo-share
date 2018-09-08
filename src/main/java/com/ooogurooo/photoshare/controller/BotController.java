@@ -1,5 +1,9 @@
 package com.ooogurooo.photoshare.controller;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import com.linecorp.bot.client.LineMessagingClient;
+import com.linecorp.bot.client.MessageContentResponse;
 import com.linecorp.bot.model.event.Event;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.ImageMessageContent;
@@ -10,9 +14,18 @@ import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.concurrent.ExecutionException;
 
 @LineMessageHandler
 public class BotController {
+
+    private LineMessagingClient lineMessagingClient;
+
+    public BotController(LineMessagingClient lineMessagingClient) {
+        this.lineMessagingClient = lineMessagingClient;
+    }
 
     @EventMapping
     public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
@@ -23,7 +36,19 @@ public class BotController {
 
     @EventMapping
     public Message handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException {
-        return new TextMessage("画像です。");
+        try {
+            MessageContentResponse response = lineMessagingClient.getMessageContent(event.getMessage().getId()).get();
+            Path postImage = Files.createTempFile("temp/", "copied." + response.getMimeType());
+            Files.copy(response.getStream(), postImage);
+
+            Cloudinary cloudinary = new Cloudinary();
+            cloudinary.uploader().upload(postImage, ObjectUtils.emptyMap());
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return new TextMessage("画像を登録できませんでした。");
+        }
+        
+        return new TextMessage("画像を投稿しました。");
     }
 
     @EventMapping
