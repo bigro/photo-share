@@ -13,7 +13,7 @@ public class CloudinaryClient {
     private Cloudinary cloudinary = new Cloudinary();
     
     public Map upload(InputStream inputStream) throws IOException {
-        Transformation transformation = new Transformation().colorSpace("black").quality(80);
+        Transformation transformation = new Transformation().background("black").quality(80);
         Map options = ObjectUtils.asMap("transformation", transformation);
         return cloudinary.uploader().upload(bytesFrom(inputStream), options);
     }
