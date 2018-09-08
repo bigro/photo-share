@@ -45,7 +45,7 @@ public class BotController {
         Path postImage = null;
         try {
             MessageContentResponse response = lineMessagingClient.getMessageContent(event.getMessage().getId()).get();
-            postImage = Files.createTempFile("/tmp/copied", "." + response.getMimeType());
+            postImage = Files.createTempFile("/tmp/copied", ".jpg");
             Files.copy(response.getStream(), postImage);
 
             Cloudinary cloudinary = new Cloudinary();
