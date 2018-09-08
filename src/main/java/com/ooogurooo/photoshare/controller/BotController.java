@@ -14,8 +14,10 @@ import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -46,24 +48,24 @@ public class BotController {
         Path postImage = null;
         try {
             MessageContentResponse response = lineMessagingClient.getMessageContent(event.getMessage().getId()).get();
-            String mimeType = response.getMimeType();
-            System.out.println("マインタイプ：" + mimeType);
-            postImage = Files.createTempFile(Paths.get("/tmp"), "copied", mimeType);
-            Files.copy(response.getStream(), postImage, StandardCopyOption.REPLACE_EXISTING);
 
             Cloudinary cloudinary = new Cloudinary();
-            cloudinary.uploader().upload(postImage.toFile(), ObjectUtils.emptyMap());
+            cloudinary.uploader().upload(bytesFrom(response.getStream()), ObjectUtils.emptyMap());
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return new TextMessage("画像を登録できませんでした。");
-        } finally {
-            if (postImage != null) {
-                File file = postImage.toFile();
-                file.delete();
-            }
         }
 
         return new TextMessage("画像を投稿しました。");
+    }
+
+    private byte[] bytesFrom(InputStream inputStream) throws IOException {
+        int c;
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        while ((c = inputStream.read()) != -1) {
+            byteArrayOutputStream.write(c);
+        }
+        return byteArrayOutputStream.toByteArray();
     }
 
     @EventMapping
