@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.concurrent.ExecutionException;
 
 @LineMessageHandler
@@ -46,7 +47,7 @@ public class BotController {
         try {
             MessageContentResponse response = lineMessagingClient.getMessageContent(event.getMessage().getId()).get();
             postImage = Files.createTempFile(Paths.get("/tmp"), "copied", ".jpg");
-            Files.copy(response.getStream(), postImage);
+            Files.copy(response.getStream(), postImage, StandardCopyOption.REPLACE_EXISTING);
 
             Cloudinary cloudinary = new Cloudinary();
             cloudinary.uploader().upload(postImage, ObjectUtils.emptyMap());
