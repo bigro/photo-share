@@ -1,6 +1,7 @@
 package com.ooogurooo.photoshare.infrastructure;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -12,7 +13,9 @@ public class CloudinaryClient {
     private Cloudinary cloudinary = new Cloudinary();
     
     public Map upload(InputStream inputStream) throws IOException {
-        return cloudinary.uploader().upload(bytesFrom(inputStream), ObjectUtils.emptyMap());
+        Transformation transformation = new Transformation().colorSpace("black").quality(80);
+        Map options = ObjectUtils.asMap("transformation", transformation);
+        return cloudinary.uploader().upload(bytesFrom(inputStream), options);
     }
 
     private byte[] bytesFrom(InputStream inputStream) throws IOException {
