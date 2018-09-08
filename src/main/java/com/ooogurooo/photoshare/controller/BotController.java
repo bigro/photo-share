@@ -1,7 +1,5 @@
 package com.ooogurooo.photoshare.controller;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.client.MessageContentResponse;
 import com.linecorp.bot.model.event.Event;
@@ -12,17 +10,11 @@ import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import com.ooogurooo.photoshare.infrastructure.CloudinaryClient;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.concurrent.ExecutionException;
 
 @LineMessageHandler
 public class BotController {
@@ -49,25 +41,16 @@ public class BotController {
         try {
             MessageContentResponse response = lineMessagingClient.getMessageContent(event.getMessage().getId()).get();
 
-            Cloudinary cloudinary = new Cloudinary();
-            cloudinary.uploader().upload(bytesFrom(response.getStream()), ObjectUtils.emptyMap());
-        } catch (InterruptedException | ExecutionException e) {
+            CloudinaryClient cloudinaryClient = new CloudinaryClient();
+            cloudinaryClient.upload(response.getStream());
+        } catch (Exception e) {
             e.printStackTrace();
             return new TextMessage("画像を登録できませんでした。");
         }
 
         return new TextMessage("画像を投稿しました。");
     }
-
-    private byte[] bytesFrom(InputStream inputStream) throws IOException {
-        int c;
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        while ((c = inputStream.read()) != -1) {
-            byteArrayOutputStream.write(c);
-        }
-        return byteArrayOutputStream.toByteArray();
-    }
-
+    
     @EventMapping
     public void handleDefaultMessageEvent(Event event) {
         System.out.println("event: " + event);
