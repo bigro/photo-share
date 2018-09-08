@@ -39,7 +39,7 @@ public class BotController {
     public Message handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException {
         try {
             MessageContentResponse response = lineMessagingClient.getMessageContent(event.getMessage().getId()).get();
-            Path postImage = Files.createTempFile(Paths.get("src/main/resourcestemp/"), "copied", response.getMimeType());
+            Path postImage = Files.createTempFile(Paths.get("src/main/resources/temp/"), "copied.", response.getMimeType());
             Files.copy(response.getStream(), postImage);
 
             Cloudinary cloudinary = new Cloudinary();
