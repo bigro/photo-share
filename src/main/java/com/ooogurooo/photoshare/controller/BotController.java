@@ -47,7 +47,7 @@ public class BotController {
         try {
             MessageContentResponse response = lineMessagingClient.getMessageContent(event.getMessage().getId()).get();
             String mimeType = response.getMimeType();
-            System.out.println("マインタイプ："mimeType);
+            System.out.println("マインタイプ：" + mimeType);
             postImage = Files.createTempFile(Paths.get("/tmp"), "copied", mimeType);
             Files.copy(response.getStream(), postImage, StandardCopyOption.REPLACE_EXISTING);
 
