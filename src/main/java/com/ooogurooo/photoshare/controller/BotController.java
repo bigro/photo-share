@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.UUID;
 
 @LineMessageHandler
 public class BotController {
@@ -40,9 +41,9 @@ public class BotController {
         Path postImage = null;
         try {
             MessageContentResponse response = lineMessagingClient.getMessageContent(event.getMessage().getId()).get();
-
+            String uuid = UUID.randomUUID().toString();
             CloudinaryClient cloudinaryClient = new CloudinaryClient();
-            cloudinaryClient.upload(response.getStream());
+            cloudinaryClient.upload(response.getStream(), "wedding/" + uuid);
         } catch (Exception e) {
             e.printStackTrace();
             return new TextMessage("画像を登録できませんでした。");

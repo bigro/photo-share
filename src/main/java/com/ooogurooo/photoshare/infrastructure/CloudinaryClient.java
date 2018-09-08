@@ -8,14 +8,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.UUID;
 
 public class CloudinaryClient {
     private Cloudinary cloudinary = new Cloudinary();
 
-    public Map upload(InputStream inputStream) throws IOException {
+    public Map upload(InputStream inputStream, String publicId) throws IOException {
         Transformation transformation = new Transformation().background("black").quality(80);
         Map options = ObjectUtils.asMap(
-                "public_id", "wedding/myname",
+                "public_id", publicId,
                 "transformation", transformation
         );
         return cloudinary.uploader().upload(bytesFrom(inputStream), options);
