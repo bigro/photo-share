@@ -12,15 +12,20 @@ import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
 
 @LineMessageHandler
 public class BotController {
+
+    @Value("${temp.image.path}")
+    private String tempPath;
 
     private LineMessagingClient lineMessagingClient;
 
@@ -40,7 +45,7 @@ public class BotController {
         Path postImage = null;
         try {
             MessageContentResponse response = lineMessagingClient.getMessageContent(event.getMessage().getId()).get();
-            postImage = Files.createTempFile("copied", "." + response.getMimeType());
+            postImage = Files.createTempFile(Paths.get(tempPath), "copied", "." + response.getMimeType());
             Files.copy(response.getStream(), postImage);
 
             Cloudinary cloudinary = new Cloudinary();
