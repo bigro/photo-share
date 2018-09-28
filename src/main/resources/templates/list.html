@@ -6,7 +6,7 @@
 </head>
 <body>
 <div th:each="image : ${images}">
-    <img th:src="${image.url}" />
+    <img th:src="${image.url()}" />
 </div>
 
 </body>
