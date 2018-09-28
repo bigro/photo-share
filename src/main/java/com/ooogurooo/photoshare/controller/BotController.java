@@ -10,8 +10,7 @@ import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
-import com.ooogurooo.photoshare.infrastructure.image.CloudinaryClient;
-import org.springframework.beans.factory.annotation.Value;
+import com.ooogurooo.photoshare.service.ImageService;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -21,9 +20,12 @@ import java.util.UUID;
 public class BotController {
     
     private LineMessagingClient lineMessagingClient;
+    
+    private ImageService service;
 
-    public BotController(LineMessagingClient lineMessagingClient) {
+    public BotController(LineMessagingClient lineMessagingClient, ImageService service) {
         this.lineMessagingClient = lineMessagingClient;
+        this.service = service;
     }
 
     @EventMapping
@@ -39,8 +41,7 @@ public class BotController {
         try {
             MessageContentResponse response = lineMessagingClient.getMessageContent(event.getMessage().getId()).get();
             String uuid = UUID.randomUUID().toString();
-            CloudinaryClient cloudinaryClient = new CloudinaryClient();
-            cloudinaryClient.save(response.getStream(), "wedding/" + uuid);
+            service.post(response.getStream(), "wedding/" + uuid);
         } catch (Exception e) {
             e.printStackTrace();
             return new TextMessage("画像を登録できませんでした。");
