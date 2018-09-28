@@ -11,4 +11,8 @@ public class Images {
     public Images(List<Image> list) {
         this.list = list;
     }
+
+    public List<Image> list() {
+        return list;
+    }
 }
