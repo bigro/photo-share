@@ -5,6 +5,9 @@
     <title>画像一覧</title>
 </head>
 <body>
-<img th:src="${imageUrl}" />
+<div th:each="image : ${images}">
+    <img th:src="${image.url}" />
+</div>
+
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.ooogurooo.photoshare.service;
 
 import com.ooogurooo.photoshare.model.image.ImageRepository;
+import com.ooogurooo.photoshare.model.image.Images;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public class ImageService {
         this.imageRepository = imageRepository;
     }
 
-    public String list() {
+    public Images list() {
         return imageRepository.list();
     }
 

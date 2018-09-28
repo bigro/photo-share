@@ -22,8 +22,8 @@ public class CloudinaryClient {
         return cloudinary.uploader().upload(bytesFrom(inputStream), options);
     }
 
-    public String findImageUrls() {
-        return cloudinary.url().publicId("wedding/ee19c600-2bed-4b1e-8d40-e07b44db8216.jpg").generate();
+    public String findImageUrls(String value) {
+        return cloudinary.url().publicId(value).generate();
     }
 
     private byte[] bytesFrom(InputStream inputStream) throws IOException {

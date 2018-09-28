@@ -1,5 +1,6 @@
 package com.ooogurooo.photoshare;
 
+import com.ooogurooo.photoshare.model.image.Images;
 import com.ooogurooo.photoshare.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +22,8 @@ public class HelloController {
 
     @GetMapping("/list")
     public String list(Model model) {
-        String url = imageService.list();
-        model.addAttribute("imageUrl", url);
+        Images images = imageService.list();
+        model.addAttribute("images", images);
         return "list";
     }
 }
