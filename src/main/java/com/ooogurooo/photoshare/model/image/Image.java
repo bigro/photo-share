@@ -9,4 +9,8 @@ public class Image {
     public Image(String url) {
         this.url = url;
     }
+
+    public String url() {
+        return url;
+    }
 }
