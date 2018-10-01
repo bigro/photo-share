@@ -6,9 +6,9 @@
 </head>
 <body>
 <section id="main">
-    <div>
+    <div style="text-align:center;">
         <ul>
-            <li th:each="image : ${images.list()}">
+            <li th:each="image : ${images.list()}" style="list-style:none;">
                 <img th:src="${image.url()}"/>
             </li>
         </ul>
