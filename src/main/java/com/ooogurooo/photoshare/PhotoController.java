@@ -10,20 +10,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping
-public class HelloController {
+public class PhotoController {
     @Autowired
     ImageService imageService;
     
-    @GetMapping("/")
-    public String hello(Model model) {
-        model.addAttribute("hello", "Hello World!!");
-        return "hello";
+    @GetMapping("/slide")
+    public String slide(Model model) {
+        addImages(model);
+        return "slide";
     }
 
     @GetMapping("/list")
     public String list(Model model) {
+        addImages(model);
+        return "list";
+    }
+
+    private void addImages(Model model) {
         Images images = imageService.list();
         model.addAttribute("images", images);
-        return "list";
     }
 }
