@@ -12,7 +12,7 @@ function connect() {
 }
 
 function showGreeting(image) {
-    $("#images").append("<li><img src=\"" + image + "\"/></li>");
+    $("#images").append("<li class=\"slideCell\"><img src=\"" + image + "\"/></li>");
 }
 
 $(function () {
