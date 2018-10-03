@@ -10,7 +10,9 @@ import com.linecorp.bot.model.message.Message;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.spring.boot.annotation.EventMapping;
 import com.linecorp.bot.spring.boot.annotation.LineMessageHandler;
+import com.ooogurooo.photoshare.model.image.Image;
 import com.ooogurooo.photoshare.service.ImageService;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -18,10 +20,12 @@ import java.util.UUID;
 
 @LineMessageHandler
 public class BotController {
-    
+
     private LineMessagingClient lineMessagingClient;
-    
+
     private ImageService service;
+
+    private SimpMessagingTemplate messagingTemplate;
 
     public BotController(LineMessagingClient lineMessagingClient, ImageService service) {
         this.lineMessagingClient = lineMessagingClient;
@@ -37,19 +41,26 @@ public class BotController {
 
     @EventMapping
     public Message handleImageMessageEvent(MessageEvent<ImageMessageContent> event) throws IOException {
-        Path postImage = null;
+        String url;
         try {
             MessageContentResponse response = lineMessagingClient.getMessageContent(event.getMessage().getId()).get();
             String uuid = UUID.randomUUID().toString();
-            service.post(response.getStream(), "wedding/" + uuid);
+            url = service.post(response.getStream(), "wedding/" + uuid);
         } catch (Exception e) {
             e.printStackTrace();
             return new TextMessage("画像を登録できませんでした。");
         }
 
+        try {
+            messagingTemplate.convertAndSend("/topic/images", new Image(url));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new TextMessage("スライドショーに追加できませんでした。");
+        }
+
         return new TextMessage("画像を投稿しました。");
     }
-    
+
     @EventMapping
     public void handleDefaultMessageEvent(Event event) {
         System.out.println("event: " + event);

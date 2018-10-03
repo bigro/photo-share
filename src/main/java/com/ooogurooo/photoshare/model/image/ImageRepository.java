@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public interface ImageRepository {
-    void save(InputStream inputStream, String publicId) throws IOException;
+    String save(InputStream inputStream, String publicId) throws IOException;
     
     Images list();
 }   

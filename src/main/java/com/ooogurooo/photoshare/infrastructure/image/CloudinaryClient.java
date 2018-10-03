@@ -12,14 +12,15 @@ import java.util.Map;
 public class CloudinaryClient {
     private Cloudinary cloudinary = new Cloudinary();
 
-    public Map upload(InputStream inputStream, String publicId) throws IOException {
+    public String upload(InputStream inputStream, String publicId) throws IOException {
         Transformation transformation = new Transformation().background("black").quality(80);
         Map options = ObjectUtils.asMap(
                 "public_id", publicId,
                 "transformation", transformation
         );
-        
-        return cloudinary.uploader().upload(bytesFrom(inputStream), options);
+
+        Map result = cloudinary.uploader().upload(bytesFrom(inputStream), options);
+        return String.valueOf(result.get("secure_url"));
     }
 
     public String findImageUrls(String value) {

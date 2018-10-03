@@ -19,7 +19,7 @@ public class ImageService {
         return imageRepository.list();
     }
 
-    public void post(InputStream image, String imageId) throws IOException {
-        imageRepository.save(image, imageId);
+    public String post(InputStream image, String imageId) throws IOException {
+        return imageRepository.save(image, imageId);
     }
 }

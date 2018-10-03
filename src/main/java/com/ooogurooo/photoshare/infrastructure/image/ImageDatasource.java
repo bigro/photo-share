@@ -26,10 +26,12 @@ public class ImageDatasource implements ImageRepository {
     }
 
     @Override
-    public void save(InputStream inputStream, String publicId) throws IOException {
-        cloudinaryClient.upload(inputStream, publicId);
+    public String save(InputStream inputStream, String publicId) throws IOException {
+        String url = cloudinaryClient.upload(inputStream, publicId);
 
         jdbcTemplate.update("INSERT INTO image VALUES (?)", publicId);
+        
+        return url;
     }
 
     @Override
