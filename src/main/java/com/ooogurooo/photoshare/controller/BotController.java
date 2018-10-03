@@ -27,9 +27,12 @@ public class BotController {
 
     private SimpMessagingTemplate messagingTemplate;
 
-    public BotController(LineMessagingClient lineMessagingClient, ImageService service) {
+    public BotController(LineMessagingClient lineMessagingClient,
+                         ImageService service, 
+                         SimpMessagingTemplate messagingTemplate) {
         this.lineMessagingClient = lineMessagingClient;
         this.service = service;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @EventMapping
