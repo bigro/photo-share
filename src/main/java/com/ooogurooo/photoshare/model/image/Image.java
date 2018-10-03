@@ -13,4 +13,8 @@ public class Image {
     public String url() {
         return url;
     }
+
+    public String getUrl() {
+        return url;
+    }
 }
