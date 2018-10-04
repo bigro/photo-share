@@ -1,5 +1,6 @@
 package com.ooogurooo.photoshare.infrastructure.image;
 
+import com.ooogurooo.photoshare.model.criteria.Limit;
 import com.ooogurooo.photoshare.model.image.Image;
 import com.ooogurooo.photoshare.model.image.ImageIdentifier;
 import com.ooogurooo.photoshare.model.image.ImageRepository;
@@ -35,8 +36,8 @@ public class ImageDatasource implements ImageRepository {
     }
 
     @Override
-    public Images list() {
-        List<ImageIdentifier> imageIdentifiers = jdbcTemplate.query("SELECT public_id FROM image", new ImageIdentifierMapper());
+    public Images list(Limit limit) {
+        List<ImageIdentifier> imageIdentifiers = findImages(limit);
 
         ArrayList<Image> images = new ArrayList<>();
         for (ImageIdentifier imageIdentifier : imageIdentifiers) {
@@ -46,8 +47,23 @@ public class ImageDatasource implements ImageRepository {
         
         return new Images(images);
     }
-    
-    
+
+    private List<ImageIdentifier> findImages(Limit limit) {
+        if(limit.none()) {
+            return selectImages();
+        }
+        return selectImagesLimit(limit);
+    }
+
+    private List<ImageIdentifier> selectImages() {
+        return jdbcTemplate.query("SELECT public_id FROM ORDER BY created_at DESC image", new ImageIdentifierMapper());
+    }
+
+    private List<ImageIdentifier> selectImagesLimit(Limit limit) {
+        return jdbcTemplate.query("SELECT public_id FROM ORDER BY created_at DESC image LIMIT ?", new ImageIdentifierMapper(), limit.value());
+    }
+
+
     private static final class ImageIdentifierMapper implements RowMapper<ImageIdentifier> {
         public ImageIdentifier mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new ImageIdentifier(rs.getString("public_id"));

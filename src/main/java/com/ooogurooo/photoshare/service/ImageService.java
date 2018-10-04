@@ -1,5 +1,6 @@
 package com.ooogurooo.photoshare.service;
 
+import com.ooogurooo.photoshare.model.criteria.Limit;
 import com.ooogurooo.photoshare.model.image.ImageRepository;
 import com.ooogurooo.photoshare.model.image.Images;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,8 @@ public class ImageService {
         this.imageRepository = imageRepository;
     }
 
-    public Images list() {
-        return imageRepository.list();
+    public Images list(Limit limit) {
+        return imageRepository.list(limit);
     }
 
     public String post(InputStream image, String imageId) throws IOException {
