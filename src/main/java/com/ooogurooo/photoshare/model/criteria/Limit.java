@@ -1,17 +1,17 @@
 package com.ooogurooo.photoshare.model.criteria;
 
 public class Limit {
-    int value;
+    Integer value;
 
-    public Limit(int value) {
+    public Limit(Integer value) {
         this.value = value;
     }
 
     public boolean none() {
-        return value == 0;
+        return value == null;
     }
 
-    public int value() {
+    public Integer value() {
         return value;
     }
 }

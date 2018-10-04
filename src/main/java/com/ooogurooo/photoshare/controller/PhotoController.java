@@ -18,14 +18,14 @@ public class PhotoController {
     
     @GetMapping("/slide")
     public String slide(Model model,
-                        @RequestParam(value = "limit", required = false) int limit) {
+                        @RequestParam(value = "limit", required = false) Integer limit) {
         addImages(model, new Limit(limit));
         return "slide";
     }
 
     @GetMapping("/list")
     public String list(Model model,
-                       @RequestParam(value = "limit", required = false) int limit) {
+                       @RequestParam(value = "limit", required = false) Integer limit) {
         addImages(model, new Limit(limit));
         return "list";
     }
