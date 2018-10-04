@@ -56,11 +56,11 @@ public class ImageDatasource implements ImageRepository {
     }
 
     private List<ImageIdentifier> selectImages() {
-        return jdbcTemplate.query("SELECT public_id FROM ORDER BY created_at DESC image", new ImageIdentifierMapper());
+        return jdbcTemplate.query("SELECT public_id FROM image ORDER BY created_at DESC", new ImageIdentifierMapper());
     }
 
     private List<ImageIdentifier> selectImagesLimit(Limit limit) {
-        return jdbcTemplate.query("SELECT public_id FROM ORDER BY created_at DESC image LIMIT ?", new ImageIdentifierMapper(), limit.value());
+        return jdbcTemplate.query("SELECT public_id FROM image ORDER BY created_at DESC LIMIT ?", new ImageIdentifierMapper(), limit.value());
     }
 
 
