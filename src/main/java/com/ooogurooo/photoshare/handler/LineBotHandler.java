@@ -38,7 +38,7 @@ public class LineBotHandler {
     public Message handleTextMessageEvent(MessageEvent<TextMessageContent> event) {
         System.out.println("event: " + event);
         final String originalMessageText = event.getMessage().getText();
-        return new TextMessage("テキストです。");
+        return new TextMessage("画像を投稿してください");
     }
 
     @EventMapping
