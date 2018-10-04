@@ -1,4 +1,4 @@
-package com.ooogurooo.photoshare.controller;
+package com.ooogurooo.photoshare.handler;
 
 import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.client.MessageContentResponse;
@@ -15,11 +15,10 @@ import com.ooogurooo.photoshare.service.ImageService;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.UUID;
 
 @LineMessageHandler
-public class BotController {
+public class LineBotHandler {
 
     private LineMessagingClient lineMessagingClient;
 
@@ -27,9 +26,9 @@ public class BotController {
 
     private SimpMessagingTemplate messagingTemplate;
 
-    public BotController(LineMessagingClient lineMessagingClient,
-                         ImageService service, 
-                         SimpMessagingTemplate messagingTemplate) {
+    public LineBotHandler(LineMessagingClient lineMessagingClient,
+                          ImageService service,
+                          SimpMessagingTemplate messagingTemplate) {
         this.lineMessagingClient = lineMessagingClient;
         this.service = service;
         this.messagingTemplate = messagingTemplate;

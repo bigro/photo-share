@@ -1,4 +1,4 @@
-package com.ooogurooo.photoshare;
+package com.ooogurooo.photoshare.controller;
 
 import com.ooogurooo.photoshare.model.image.Images;
 import com.ooogurooo.photoshare.service.ImageService;
